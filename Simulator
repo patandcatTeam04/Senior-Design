@@ -1,3 +1,4 @@
+
 //this program simulates contractions
 //it produces contractions with duration 30-120 secs at varying frequencies, with up to 90 secs.
 //b/n and no fewer than 50 seconds. between
@@ -6,13 +7,17 @@ int randNumber_dur;
 int randNumber_freq;
 int randNumber_dur_time;
 int randNumber_freq_time;
-int LED = 13; //defines PIN13 to light the LED
+int air_in = 13; //defines PIN13 to light the LED indicating air should enter ball
+int air_out = 12; //defines PIN12 to light the LED indicating air should leave ball
+int motor = 7; //defines PIN7 to turn on/off the motor by controling the mosfet gate
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600); //setup serial monitor
   randomSeed(analogRead(0)); //initializes the random number generator
-  pinMode(LED, OUTPUT); //sets up PIN13
+  pinMode(air_in, OUTPUT); //sets up PIN13
+  pinMode(air_out, OUTPUT); //sets up PIN12
+  pinMode(motor, OUTPUT); //sets up motor to be output
 }
 
 void loop() {
@@ -21,7 +26,8 @@ void loop() {
   randNumber_dur = random(30, 130); //generate random number from 30 to 120
   // randNumber_dur = random(3, 12); //generate random number from 3 to 12 for troubleshooting efficiency
   Serial.print("duration = ");  Serial.println(randNumber_dur); //display selected duration
-  digitalWrite(LED, HIGH); //turn the LED ON
+  digitalWrite(air_in, HIGH); //turn on the LED indicating air should enter ball
+  digitalWrite(motor, HIGH);//turns motor on 
   Serial.println("LED ON");
   randNumber_dur_time = (randNumber_dur * 1000) / 4; //change delay time into milliseconds
   //break up delay time into durations short enough to be readable
@@ -29,15 +35,18 @@ void loop() {
   Serial.println("1/4");
   delay(randNumber_dur_time);
   Serial.println("Half way there!");
+  digitalWrite(air_in, LOW); //turn off the LED indicating air should enter ball
+  digitalWrite(air_out, HIGH); //turn on the LED indicating air should leave ball
   delay(randNumber_dur_time);
   Serial.println("3/4");
   delay(randNumber_dur_time);
-  digitalWrite(LED, LOW); //turn the LED OFF
+  digitalWrite(air_out, LOW); //turn off the LED indicating air should leave ball
+  digitalWrite(motor, LOW); //end of contraction - turns motor off until next contraction
   Serial.println("LED OFF");
-  if (randNumber_dur > 120) { //Optoco should alert user when this serial monitor warning is displayed
+  /*if (randNumber_dur > 120) { //Optoco should alert user when this serial monitor warning is displayed
     //  if (randNumber_dur < 3 || randNumber_dur > 12) {
-    Serial.print("dur danger! = "); Serial.println(randNumber_freq);
-  }
+    //Serial.print("dur danger! = "); Serial.println(randNumber_freq);
+  }*/
 //FREQUENCY (break b/n contractions)
   randNumber_freq = random(50, 90); //generate random number from 50 to 90; under 60 is dangerous
  // randNumber_freq = random(15, 29); //generate random number from 5 to 9 for troubleshooting efficiency
