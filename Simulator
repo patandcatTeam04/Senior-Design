@@ -35,10 +35,10 @@ void loop() {
   Serial.println("1/4");
   delay(randNumber_dur_time);
   Serial.println("Half way there!");
-  digitalWrite(air_in, LOW); //turn off the LED indicating air should enter ball
-  digitalWrite(air_out, HIGH); //turn on the LED indicating air should leave ball
   delay(randNumber_dur_time);
   Serial.println("3/4");
+  digitalWrite(air_in, LOW); //turn off the LED indicating air should enter ball
+  digitalWrite(air_out, HIGH); //turn on the LED indicating air should leave ball
   delay(randNumber_dur_time);
   digitalWrite(air_out, LOW); //turn off the LED indicating air should leave ball
   digitalWrite(motor, LOW); //end of contraction - turns motor off until next contraction
