@@ -10,6 +10,7 @@ int randNumber_freq_time;
 int air_in = 13; //defines PIN13 to light the LED indicating air should enter ball
 int air_out = 12; //defines PIN12 to light the LED indicating air should leave ball
 int motor = 7; //defines PIN7 to turn on/off the motor by controling the mosfet gate
+int sol_1 = 8; //defines PIN8 to open (high) and close (low) this solenoid
 
 void setup() {
   // put your setup code here, to run once:
@@ -18,12 +19,14 @@ void setup() {
   pinMode(air_in, OUTPUT); //sets up PIN13
   pinMode(air_out, OUTPUT); //sets up PIN12
   pinMode(motor, OUTPUT); //sets up motor to be output
+  pinMode(sol_1, OUTPUT); //sets up solenoid to be output
 }
 
 void loop() {
   // run the following continuously:
   //DURATION (contraction generation):
-  randNumber_dur = random(30, 130); //generate random number from 30 to 120
+  //randNumber_dur = random(30, 130); //generate random number from 30 to 120
+  randNumber_dur = 10; 
   // randNumber_dur = random(3, 12); //generate random number from 3 to 12 for troubleshooting efficiency
   Serial.print("duration = ");  Serial.println(randNumber_dur); //display selected duration
   digitalWrite(air_in, HIGH); //turn on the LED indicating air should enter ball
@@ -39,9 +42,11 @@ void loop() {
   Serial.println("3/4");
   digitalWrite(air_in, LOW); //turn off the LED indicating air should enter ball
   digitalWrite(air_out, HIGH); //turn on the LED indicating air should leave ball
+  digitalWrite(sol_1, HIGH); //opens solenoid1 to release air from ball
   delay(randNumber_dur_time);
   digitalWrite(air_out, LOW); //turn off the LED indicating air should leave ball
   digitalWrite(motor, LOW); //end of contraction - turns motor off until next contraction
+  digitalWrite(sol_1, LOW); //closes solenoid1 when the contraction finishes
   Serial.println("LED OFF");
   /*if (randNumber_dur > 120) { //Optoco should alert user when this serial monitor warning is displayed
     //  if (randNumber_dur < 3 || randNumber_dur > 12) {
